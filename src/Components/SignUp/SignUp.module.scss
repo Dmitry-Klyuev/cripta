@@ -1,0 +1,37 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .wrapper {
+    min-width: 1110px;
+    min-height: 550px;
+    display: flex;
+    justify-content: space-between;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+
+      :first-child {
+        width: 159px;
+        padding: 62px 191px;
+      }
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      input{
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
