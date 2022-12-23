@@ -1,87 +1,154 @@
 import styles from './SignUp.module.scss'
 import logo from '../../assets/Logo.png'
 import photo from '../../assets/Rectangle.png'
-import {useFormik} from "formik";
+import {Link, useNavigate} from "react-router-dom";
+import {Button, Checkbox, Form, Input} from "antd";
+import {RegistrationUser} from "../../store/UserSlice";
+import {useDispatch} from "react-redux";
+import {useState} from "react";
 
 export const SignUp = () => {
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password1: '',
-            password2: '',
-            iAgree: false ,
-        },
-        validate: (values) => {
-            const errors = {}
-            if (!values.email) {
-                errors.email = 'Required'
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = 'Invalid email address'
-            }
-            if (!values.password1) {
-                errors.password1 = 'Обязательно для заполнения'
-            } else if (values.password1.length < 3) {
-                errors.password1 = 'Слишком маленький пароль'
-            }
-            if (!values.password2) {
-                errors.password2 = 'Обязательно для заполнения'
-            } else if (values.password2.length < 3) {
-                errors.password2 = 'Слишком маленький пароль'
-            }else if (values.password2 !== values.password1){
-                errors.password2 = 'Пароли не совпадают'
-            }
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-            return errors
-        },
-        onSubmit: values => {
-            alert(JSON.stringify(values));
-            formik.resetForm()
-        },
-    })
+    const onFinish = (values) => {
+        const payload = {name: values.name, email: values.email, password: values.password}
+        dispatch(RegistrationUser(payload))
+        navigate('/signing')
 
+        console.log('Success:', values);
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+    const finishRegistration = () => {
+        dispatch()
+    }
+
+    const [verify, setVerify] = useState(true)
+    const [popValue, setPopValue] = useState('')
 
     return (
-        <div className={styles.container}>
-            <div className={styles.wrapper}>
-                <div className={styles.content}>
-                    <img src={logo} alt="logo"/>
-                    <img src={photo} alt="photo"/>
+        <>
+            {verify && (
+                <div className={styles.popupVerify}>
+                    Введите код, который пришел на почту
+                    <input type="text"
+                           value={popValue}
+                           onChange={e => setPopValue(e.currentTarget.value)}/>
+                    <Button type="primary"
+                            onClick={finishRegistration}
+                    >Подтвердить</Button>
                 </div>
-                <div className={styles.form}>
-                    <h2>Зарегистрироваться</h2>
-                    <p>Уже есть аккаунт? Войти</p>
-                    <form onSubmit={formik.handleSubmit}>
-                        Эл.почта
-                        <input type="text"
-                               onBlur={formik.handleBlur}
-                               {...formik.getFieldProps('email')}
-                        />
-                        {formik.errors.email && <h4>{formik.errors.email}</h4>}
-                        Пароль
-                        <input type="password"
-                               onBlur={formik.handleBlur}
-                               {...formik.getFieldProps('password1')}
-                        />
-                        {formik.errors.password1 && <h5>{formik.errors.password1}</h5>}
-                        Пароль
-                        <input type="password"
-                               onBlur={formik.handleBlur}
-                               {...formik.getFieldProps('password2')}
-                        />
-                        {formik.errors.password2 && <h5>{formik.errors.password2}</h5>}
+            )}
+            <div className={styles.container}
+                 onClick={() => setVerify(false)}
+            >
+                <div className={styles.wrapper}>
+                    <div className={styles.content}>
+                        <div className={styles.contentLogo}>
+                            <img src={logo} alt="logo"/>
+                        </div>
+                        <div>
+                            <img src={photo} alt="contentPhoto"/>
+                        </div>
+                    </div>
+                    <div className={styles.form}>
+                        <h1>Зарегистрироваться</h1>
+                        <p>Уже есть аккаунт? <span> <Link to={'/signing'}>Войти</Link> </span></p>
+                        <Form
+                            className={styles.formContents}
+                            name="basic"
+                            labelCol={{
+                                span: 18,
+                            }}
+                            wrapperCol={{
+                                span: 24,
+                            }}
+                            initialValues={{
+                                remember: false,
+                            }}
+                            layout={"vertical"}
+                            onFinish={onFinish}
+                            onFinishFailed={onFinishFailed}
+                            autoComplete="off"
+                        >
+                            <Form.Item
+                                className={styles.formItem}
+                                label="Имя"
+                                name="name"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your username!',
+                                    },
+                                ]}
+                            >
+                                <Input bordered={false}/>
+                            </Form.Item>
+                            <Form.Item
+                                className={styles.formItem}
+                                label="Эл.почта"
+                                name="email"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your username!',
+                                    },
+                                ]}
+                            >
+                                <Input bordered={false}/>
+                            </Form.Item>
+                            <Form.Item
+                                className={styles.formItem}
+                                label="Пароль"
+                                name="password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your password!',
+                                    },
+                                ]}
+                            >
+                                <Input.Password bordered={false}/>
+                            </Form.Item>
+                            <Form.Item
+                                className={styles.formItem}
+                                label="Пароль"
+                                name="re-password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your password!',
 
-                        <input type="checkbox"
-                               onBlur={formik.handleBlur}
-                               {...formik.getFieldProps('iAgree')}
+                                    },
+                                ]}
+                            >
+                                <Input.Password bordered={false}/>
+                            </Form.Item>
 
-                               // onChange={formik.handleChange}
-                               // value={formik.values.iAgree}
-                        />
-                        Я даю согласие на обработку моих персональных данных Политика конфиденциальности
-                        <button type={"submit"}>Submit</button>
-                    </form>
+                            <Form.Item
+                                name="iAgree"
+                                className={styles.formAgree}
+                                valuePropName="checked"
+                            >
+                                <Checkbox>Я даю согласие на обработку моих персональных данных Политика
+                                    конфиденциальности</Checkbox>
+                            </Form.Item>
+
+                            <Form.Item className={styles.btnWrapper}>
+                                <Button type="primary"
+                                        htmlType="submit"
+                                        className={styles.btn}
+                                >
+                                    Зарегистрироваться
+                                </Button>
+                            </Form.Item>
+
+                        </Form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

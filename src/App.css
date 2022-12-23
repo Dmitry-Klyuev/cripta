@@ -1,5 +1,25 @@
 .App {
     min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    position: relative;
 }
+.loading{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+}
+.loading :first-child{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+
 
 
