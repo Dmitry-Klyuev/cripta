@@ -1,9 +1,18 @@
 import styles from './Products.module.scss'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Table} from "antd";
+import {Link} from "react-router-dom";
+import {useEffect} from "react";
+import {GetProducts} from "../../../store/ProductSlice";
 
 
 export const Products = () => {
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(GetProducts())
+    },[])
+
     // const {balance} = useSelector(state => state.user.data.accounts)
     const products = useSelector(state => state.products.data)
     console.log(products)
@@ -39,6 +48,7 @@ export const Products = () => {
             dataIndex: 'NameProduct',
             defaultSortOrder: 'descend',
             sorter: (a, b) => a.NameProduct - b.NameProduct,
+            render:(text) => <Link to={text}>{text}</Link>
         },
         {
             title: 'Прибыль',
@@ -106,7 +116,7 @@ export const Products = () => {
             </div>
             <div className={styles.productsWrapper}>
 
-                <Table columns={columns} dataSource={data} onChange={onChange}/>
+                <Table columns={columns} dataSource={data} onChange={onChange} />
 
             </div>
         </div>

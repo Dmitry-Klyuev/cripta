@@ -10,9 +10,9 @@ export const LoginUser = createAsyncThunk(
             const response = await userAPI.login(payload)
             debugger
             console.log(response.data)
-            if (response.data.status !== 1){
-                throw new Error(response.data.error.text)
-            }
+            // if (response.data.status !== 1){
+            //     throw new Error(response.data.error.text)
+            // }
             return response.data
         } catch (e) {
             return rejectWithValue(e.message)
@@ -25,15 +25,15 @@ export const logOutUser = createAsyncThunk(
     'user/LogOut',
     async function (_, {rejectWithValue, dispatch}) {
         try {
+            const token = localStorage.getItem('token')
             dispatch(setStatus('loading'))
-            const response = await userAPI.logOut()
+            const response = await userAPI.logOut(token)
             debugger
-            if (response.data.status !== 1){
+            if (response.data.status !== 1) {
                 throw new Error(response.data.error.text)
             }
             return response.data
-        }
-        catch (e) {
+        } catch (e) {
             return rejectWithValue(e.message)
         }
     }
@@ -41,20 +41,37 @@ export const logOutUser = createAsyncThunk(
 
 export const RegistrationUser = createAsyncThunk(
     'user/registration',
-    async function (payload, {rejectWithValue, dispatch}){
+    async function (payload, {rejectWithValue, dispatch}) {
         try {
             dispatch(setStatus('loading'))
             const response = await userAPI.registration(payload)
-            if (response.data.status !== 1){
+            if (response.status !== 200) {
                 throw new Error(response.data.error.text)
             }
             return response.data
-        }
-        catch (e) {
+        } catch (e) {
             return rejectWithValue(e.message)
         }
     }
+)
+export const authUser = createAsyncThunk(
+    'user/LoginUser',
+    async function (_, {rejectWithValue, dispatch}) {
+        try {
+            const token = localStorage.getItem('token')
+            dispatch(setStatus('loading'))
+            const response = await userAPI.authMe(token)
+            debugger
+            console.log(response.data)
+            if (response.status !== 200) {
+                throw new Error(response.data.error.text)
+            }
+            return response.data
+        } catch (e) {
+            return rejectWithValue(e.message)
+        }
 
+    }
 )
 
 
@@ -67,7 +84,7 @@ const UserSlice = createSlice({
             email: "",
             token: '',
             accounts: {
-                user_id:'',
+                user_id: '',
                 currency_id: '',
                 amount: '',
                 currency_ticker: "",
@@ -85,22 +102,18 @@ const UserSlice = createSlice({
         },
     },
     extraReducers: {
-        [LoginUser.pending]: (state, action) => {
-        },
         [LoginUser.fulfilled]: (state, action) => {
             debugger
             state.data = action.payload.data
             state.status = 'null'
             state.isAuth = true
-            localStorage.setItem('token', state.data.token)
+            localStorage.setItem('token', action.payload.data.token)
         },
         [LoginUser.rejected]: (state, action) => {
             state.status = 'null'
             state.error = action.payload
         },
-        [logOutUser.pending]: (state, action) => {
 
-        },
         [logOutUser.fulfilled]: (state, action) => {
             debugger
             state.status = 'null'
@@ -113,6 +126,7 @@ const UserSlice = createSlice({
             state.error = action.payload
 
         },
+
         [RegistrationUser.pending]: (state, action) => {
 
         },
@@ -124,6 +138,16 @@ const UserSlice = createSlice({
 
         },
 
+        [authUser.fulfilled]: (state, action) => {
+            debugger
+            state.data = action.payload
+            state.status = 'null'
+            state.isAuth = true
+        },
+        [authUser.rejected]: (state, action) => {
+            state.status = 'null'
+            state.error = action.payload
+        },
     }
 })
 

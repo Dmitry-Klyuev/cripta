@@ -1,76 +1,48 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {productsApi} from "../api/api";
+import {RegistrationUser} from "./UserSlice";
+
+export const GetProducts = createAsyncThunk(
+    'products/getProducts',
+    async function(_, {rejectWithValue, dispatch}){
+        try {
+            const token = localStorage.getItem('token')
+            const response = await productsApi.products(token)
+            debugger
+            console.log(response)
+            return response.data
+        }
+        catch (e) {
+            return rejectWithValue(e.message)
+
+        }
+    }
+)
 
 
 const ProductSlice = createSlice({
     name: 'product',
     initialState: {
-        data: [
-            {
-                id: 1,
-                name: "test4",
-                description: "test description",
-                life_time: 365,
-                minimal_amount: "10000.00000000",
-                currency_id: 3,
-                check_period: 7,
-                percent_when_check: 0.4,
-                expected_percent: 40,
-                type_trade: 1,
-                coupon_barrier_percent: 50,
-                closing_barrier_percent: 50,
-                memory_effect: 0,
-                hot_at: null,
-                active: 1,
-                created_at: "2022-11-22T08:28:15.000000Z",
-                updated_at: "2022-12-22T08:28:15.000000Z",
-                status: 'В работе',
-            },
-            {
-                id: 2,
-                name: "test1",
-                description: "test description",
-                life_time: 365,
-                minimal_amount: "10000.00000000",
-                currency_id: 3,
-                check_period: 14,
-                percent_when_check: 1.5,
-                expected_percent: 40,
-                type_trade: 1,
-                coupon_barrier_percent: 40,
-                closing_barrier_percent: 40,
-                memory_effect: 0,
-                hot_at: null,
-                active: 1,
-                created_at: "2022-10-22T08:28:15.000000Z",
-                updated_at: "2022-12-22T08:28:15.000000Z",
-                status: 'В работе',
-            },
-            {
-                id: 3,
-                name: "test2",
-                description: "test description",
-                life_time: 30,
-                minimal_amount: "10000.00000000",
-                currency_id: 3,
-                check_period: 30,
-                percent_when_check: 30,
-                expected_percent: 40,
-                type_trade: 1,
-                coupon_barrier_percent: 100,
-                closing_barrier_percent: 100,
-                memory_effect: 0,
-                hot_at: null,
-                active: 1,
-                created_at: "2022-12-22T08:28:15.000000Z",
-                updated_at: "2022-12-22T08:28:15.000000Z",
-                status: 'В работе',
-            }
-        ],
+        data: []
     },
     reducers:{
         setProducts(state, action){
 
         }
+    },
+    extraReducers:{
+        [GetProducts.pending]: (state, action) => {
+
+        },
+        [GetProducts.fulfilled]: (state, action) =>{
+            debugger
+            state.status = 'null'
+            state.data = action.payload.data
+        },
+        [GetProducts.rejected]: (state, action) => {
+            state.status = 'null'
+
+        },
     }
 })
 
