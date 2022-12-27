@@ -9,7 +9,7 @@ import {Products} from "./Components/UserContents/Products/Products";
 import {Balance} from "./Components/UserContents/Balance/Balance";
 import {Spin} from "antd";
 import {Product} from "./Components/UserContents/Products/Product/Product";
-import {authUser} from "./store/UserSlice";
+import {authMe} from "./store/UserSlice";
 
 function App() {
 
@@ -20,11 +20,11 @@ function App() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!isAuth && !!localStorage.getItem('token')){
-            dispatch(authUser())
+        if (!!localStorage.getItem('token')){
+            dispatch(authMe())
         }
         if (isAuth){
-            navigate('/')
+            navigate('/user/products')
         }else{
             navigate('/signing')
         }
@@ -36,7 +36,6 @@ function App() {
                 <Spin size="large"/>
             </div>}
             {isAuth && <Header/>}
-
             <Routes>
                 <Route path={'/'} element={isAuth ? <Navigate to={'/user/products'}/> : <Navigate to='/signing'/>}/>
                 <Route path={'/signup'} element={<SignUp/>}/>

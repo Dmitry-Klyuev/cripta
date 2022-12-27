@@ -48,7 +48,10 @@ export const Products = () => {
             dataIndex: 'NameProduct',
             defaultSortOrder: 'descend',
             sorter: (a, b) => a.NameProduct - b.NameProduct,
-            render:(text) => <Link to={text}>{text}</Link>
+            render:(text, record, index) => {
+                console.log('index:' + index)
+                return <Link to={'/user/products/'+index}>{text}</Link>
+            }
         },
         {
             title: 'Прибыль',

@@ -3,7 +3,7 @@ import logo from '../../assets/Logo.png'
 import photo from '../../assets/Rectangle.png'
 import {Link, useNavigate} from "react-router-dom";
 import {Button, Checkbox, Form, Input} from "antd";
-import {RegistrationUser} from "../../store/UserSlice";
+// import {RegistrationUser} from "../../store/UserSlice";
 import {useDispatch} from "react-redux";
 import {useState} from "react";
 
@@ -13,7 +13,7 @@ export const SignUp = () => {
 
     const onFinish = (values) => {
         const payload = {name: values.name, email: values.email, password: values.password}
-        dispatch(RegistrationUser(payload))
+        // dispatch(RegistrationUser(payload))
         navigate('/signing')
 
         console.log('Success:', values);
