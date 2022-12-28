@@ -1,9 +1,9 @@
 import styles from './Products.module.scss'
 import {useDispatch, useSelector} from "react-redux";
-import {Table} from "antd";
+import {Skeleton, Table} from "antd";
 import {Link} from "react-router-dom";
 import {useEffect} from "react";
-import {GetProducts} from "../../../store/ProductSlice";
+import {GetProducts} from "../../store/ProductSlice";
 
 
 export const Products = () => {
@@ -15,7 +15,6 @@ export const Products = () => {
 
     // const {balance} = useSelector(state => state.user.data.accounts)
     const products = useSelector(state => state.products.data)
-    console.log(products)
 
     const columns = [
         {
@@ -118,8 +117,8 @@ export const Products = () => {
 
             </div>
             <div className={styles.productsWrapper}>
+                {data  ? <Table columns={columns} dataSource={data} onChange={onChange} /> :  <Skeleton />}
 
-                <Table columns={columns} dataSource={data} onChange={onChange} />
 
             </div>
         </div>

@@ -1,9 +1,9 @@
 import styles from './Table.module.scss'
 import {DatePicker} from "antd";
 import dayjs from "dayjs";
-import coin1 from  './assets/bitcoin.png'
-import Tether from  './assets/bitcoin2.png'
-import Litecoin from  './assets/bitcoin3.png'
+import coin1 from './assets/bitcoin.png'
+import Tether from './assets/bitcoin2.png'
+import Litecoin from './assets/bitcoin3.png'
 
 
 export const Table = () => {

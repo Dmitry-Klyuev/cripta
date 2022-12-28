@@ -1,15 +1,16 @@
 import {Header} from "./Components/Header/Header";
 import { Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import './App.css';
-import {SignUp} from "./Components/SignUp/SignUp";
+import {SignUp} from "./Pages/SignUp/SignUp";
 import {useEffect} from "react";
-import {SignIng} from "./Components/SignIng/SignIng";
+import {SignIng} from "./Pages/SignIng/SignIng";
 import {useDispatch, useSelector} from "react-redux";
-import {Products} from "./Components/UserContents/Products/Products";
-import {Balance} from "./Components/UserContents/Balance/Balance";
+import {Balance} from "./Pages/Balance/Balance";
 import {Spin} from "antd";
-import {Product} from "./Components/UserContents/Products/Product/Product";
 import {authMe} from "./store/UserSlice";
+import {Products} from "./Pages/Products/Products";
+import {Product} from "./Pages/Product/Product";
+import {NotFound} from "./Pages/404/NotFound";
 
 function App() {
 
@@ -23,12 +24,12 @@ function App() {
         if (!!localStorage.getItem('token')){
             dispatch(authMe())
         }
-        if (isAuth){
-            navigate('/user/products')
-        }else{
-            navigate('/signing')
-        }
-    }, [isAuth])
+        // if (isAuth){
+        //     navigate('/user/products')
+        // }else{
+        //     navigate('/signing')
+        // }
+    }, [])
 
     return (
         <div className={'App'}>
@@ -47,7 +48,7 @@ function App() {
                 <Route path={'/user/support'} element={<h1>Support</h1>}/>
                 <Route path={'/user/faq'} element={<h1>FAQ</h1>}/>
                 <Route path={'*'} element={<Navigate to={'404'}/>}/>
-                <Route path={'404'} element={<h1 style={{textAlign: 'center'}}>404</h1>}/>
+                <Route path={'404'} element={<NotFound/>}/>
             </Routes>
             {isAuth && <Header/>}
         </div>

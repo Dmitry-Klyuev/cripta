@@ -1,16 +1,19 @@
 import styles from './SignIng.module.scss'
 import logo from "../../assets/Logo.png";
 import photo from "../../assets/Rectangle.png";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Button, Form, Input} from "antd";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {LoginUser} from "../../store/UserSlice";
 
 export const SignIng = () => {
     const dispatch = useDispatch()
-
+    const isAuth = useSelector(state => state.user.isAuth)
+    const navigate = useNavigate()
+    if (isAuth ){
+        navigate('/user/products')
+    }
     const onFinish = (values) => {
-        console.log('Success:', values);
         if (values){
             dispatch(LoginUser(values))
         }

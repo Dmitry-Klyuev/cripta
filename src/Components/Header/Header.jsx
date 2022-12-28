@@ -1,7 +1,7 @@
 import styles from './Header.module.scss'
 import {menu} from "./constants";
 import {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 
 import logo from '../../assets/Logo.png'
 import ava from '../../assets/Ava.png'
@@ -9,10 +9,14 @@ import {useDispatch} from "react-redux";
 import {logOutUser} from "../../store/UserSlice";
 
 export const Header = () => {
-    const [isActive, setIsActive] = useState(0)
+    const [isActive, setIsActive] = useState(1)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    let location = useLocation();
 
+    if (location === '/404'){
+        setIsActive(null)
+    }
     const logOut = () => {
         dispatch(logOutUser())
     }
@@ -29,8 +33,8 @@ export const Header = () => {
                     {menu.map((el, i) => {
                         return <li key={i}>
                             <Link to={'user/' + el.en.toLowerCase()}
-                                  className={isActive === i ? styles.active : styles.noActive}
-                                  onClick={() => setIsActive(i)}
+                                  className={isActive === i + 1 ? styles.active : styles.noActive}
+                                  onClick={() => setIsActive(i + 1)}
                             >{el.ru}</Link>
                         </li>
                     })}

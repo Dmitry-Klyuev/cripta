@@ -3,7 +3,6 @@ import logo from '../../assets/Logo.png'
 import photo from '../../assets/Rectangle.png'
 import {Link, useNavigate} from "react-router-dom";
 import {Button, Checkbox, Form, Input} from "antd";
-// import {RegistrationUser} from "../../store/UserSlice";
 import {useDispatch} from "react-redux";
 import {useState} from "react";
 
